@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pratica</title>
+
+  <link rel="stylesheet" href="bootstrap-5.1.0-dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-8 col-xs-offset-2">
+        <br><br>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>knockout bindings</h4>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="alert alert alert-warning">Mensagem</div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- COL ESQUERDA -->
+              <div class="col-xs-6">
+                <strong>Lista de Itens</strong>
+                <ul class="list-group" data-bind="foreach: lista">
+                  <li class="list-group-item">
+                    <input type="checkbox" />
+                    <!-- ko text: descricao -->
+                    <!-- /ko -->
+                  </li>
+                </ul>
+                <!-- <li class="list-group-item">
+                  <input type="checkbox" checked />
+                  Descrição Item
+                </li> -->
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-2 total">Total:</div>
+                    <div class="col-xs-2 total" data-bind="text: lista().length"></div>
+                    <div class="col-xs-2 total text-center"><input type="checkbox" /> :</div>
+                    <div class="col-xs-2 total">1</div>
+                    <div class="col-xs-2 total text-center"><input type="checkbox" checked /> :</div>
+                    <div class="col-xs-2 total">1</div>
+                  </div>
+                </div>
+              </div>
+              <!-- COL DIREITA -->
+              <div class="col-xs-6">
+                <div class="row">
+                  <div class="col-xs-12"><label>Descrição do Item</label></div>
+                  <div class="col-xs-12"><input type="text" class="form-control input-sm" data-bind="value: descricaoItem" /></div>
+                  <div class="col-xs-12"><br></div>
+                  <div class="col-xs-12"><button class="btn btn-primary btn-block" data-bind="click: incluirItem">Incluir item</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js" integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+
+    function ViewModel() {
+      var self = this;
+
+      self.lista = ko.observableArray([]);
+      self.descricaoItem = ko.observable();
+
+      self.alerta = ko.observable({ mostrar: false, mensagem: "", tipo: "" })
+
+      self.incluirItem = function () {
+        self.lista.push({ descricao: self.descricaoItem(), checado: false })
+        self.descricaoItem("");
+      };
+    }
+
+    vm = new ViewModel();
+    ko.applyBindings(vm);
+
+  </script>
+
+
+</body>
+
+</html>
