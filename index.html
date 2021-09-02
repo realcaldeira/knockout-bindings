@@ -11,38 +11,88 @@
 
 </head>
 
-<body>
-  <!-- This is a *view* - HTML markup that defines the appearance of your UI -->
+<h2>Your seat reservations</h2>
 
-  <p>First name: <strong data-bind="text: firstName">todo</strong></p>
-  <p>Last name: <strong data-bind="text: lastName">todo</strong></p>
-  <p>Full name: <strong data-bind="text: fullName"></strong> </p>
+<table>
+  <thead>
+    <tr>
+      <th>Passenger name</th>
+      <th>Meal</th>
+      <th>Surcharge</th>
+      <th></th>
+    </tr>
+  </thead>
+  <!-- Todo: Generate table body -->
+  <tbody data-bind="foreach: seats">
+    <h2>Your seat reservations( <span data-bind="text: seats().length"></span> )</h2>
 
-  <button data-bind="click: capitalizeName">Go caps</button>
+    <tr>
+      <td><input data-bind="text: name"></td>
+      <td><select data-bind="options: $root.availableMeals, value: meal, optionsText: 'mealName' "></select></td>
+      <td data-bind="text: formattedPrice"></td>
+      <td><a href="#" data-bind="click: $root.removeSeat">Remove</a></td>
+    </tr>
+    <h3 data-bind="visible: totalSurcharge() > 0">
+      Total surcharge: $<span data-bind="text: totalSurcharge().toFixed(2)"></span>
+    </h3>
+  </tbody>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js" integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <button data-bind="click: addSeat, enable: seats().length < 5">Reserve another seat</button>
+</table>
 
-  <script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js" integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    function ViewModel() {
-      this.firstName = ko.observable("Lucas");
-      this.lastName = ko.observable("Caldeira");
+<script>
 
-      this.fullName = ko.computed(function () {
-        return this.firstName() + " " + this.lastName();
-      }, this);
+  function SeatReservation(name, initialMeal) {
+    var self = this;
+    self.name = name;
+    self.meal = ko.observable(initialMeal);
 
-      this.capitalizeName = function () {
-        var currentVal = this.lastName();
-        this.lastName(currentVal.toUpperCase());
-      }
+    self.formattedPrice = ko.computed(function () {
+      var price = self.meal().price;
+      return price ? "$" + price.toFixed(2) : "None";
+    })
+  }
 
+  function ReservationsViewModel() {
+    var self = this;
+
+    self.availableMeals = [
+      { mealName: "Standard (sandwich)", price: 0 },
+      { mealName: "Premium (lobster)", price: 34.95 },
+      { mealName: "Ultimate (whole zebra)", price: 290 }
+    ];
+
+    self.seats = ko.observableArray([
+      new SeatReservation("Steve", self.availableMeals[0]),
+      new SeatReservation("Bert", self.availableMeals[0]),
+
+    ])
+
+
+    self.addSeat = function () {
+      self.seats.push(new SeatReservation("", self.availableMeals[0]));
     }
 
-    vm = new ViewModel();
-    ko.applyBindings(vm);
+    self.removeSeat = function (seat) {
+      self.seats.remove(seat);
+    }
 
-  </script>
+    self.totalSurcharge = ko.computed(function () {
+      var total = 0;
+      for (var i = 0; i < self.seats().length; i++) {
+        total += self.seats()[i].meal().price;
+      }
+      return total;
+
+    });
+
+  }
+
+  ko.applyBindings(new ReservationsViewModel());
+
+</script>
 
 
 </body>
