@@ -8,89 +8,38 @@
   <title>Pratica</title>
 
   <link rel="stylesheet" href="bootstrap-5.1.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
 
 </head>
 
-<h2>Your seat reservations</h2>
+<body>
 
-<table>
-  <thead>
-    <tr>
-      <th>Passenger name</th>
-      <th>Meal</th>
-      <th>Surcharge</th>
-      <th></th>
-    </tr>
-  </thead>
-  <!-- Todo: Generate table body -->
-  <tbody data-bind="foreach: seats">
-    <h2>Your seat reservations( <span data-bind="text: seats().length"></span> )</h2>
+  <ul class="folders" data-bind="foreach: folders">
+    <li data-bind="text: $data, 
+    css: { selected: $data == $root.chosenFolderId()},
+    click: $root.goToFolder"></li>
+  </ul>
 
-    <tr>
-      <td><input data-bind="text: name"></td>
-      <td><select data-bind="options: $root.availableMeals, value: meal, optionsText: 'mealName' "></select></td>
-      <td data-bind="text: formattedPrice"></td>
-      <td><a href="#" data-bind="click: $root.removeSeat">Remove</a></td>
-    </tr>
-    <h3 data-bind="visible: totalSurcharge() > 0">
-      Total surcharge: $<span data-bind="text: totalSurcharge().toFixed(2)"></span>
-    </h3>
-  </tbody>
+</body>
 
-  <button data-bind="click: addSeat, enable: seats().length < 5">Reserve another seat</button>
-</table>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js" integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-
-  function SeatReservation(name, initialMeal) {
+  function WebmailViewModel() {
     var self = this;
-    self.name = name;
-    self.meal = ko.observable(initialMeal);
+    self.folders = ['Inbox', 'Archive', 'Sent', 'Spam'];
+    self.chosenFolderId = ko.observable();
 
-    self.formattedPrice = ko.computed(function () {
-      var price = self.meal().price;
-      return price ? "$" + price.toFixed(2) : "None";
-    })
-  }
-
-  function ReservationsViewModel() {
-    var self = this;
-
-    self.availableMeals = [
-      { mealName: "Standard (sandwich)", price: 0 },
-      { mealName: "Premium (lobster)", price: 34.95 },
-      { mealName: "Ultimate (whole zebra)", price: 290 }
-    ];
-
-    self.seats = ko.observableArray([
-      new SeatReservation("Steve", self.availableMeals[0]),
-      new SeatReservation("Bert", self.availableMeals[0]),
-
-    ])
-
-
-    self.addSeat = function () {
-      self.seats.push(new SeatReservation("", self.availableMeals[0]));
+    self.goToFolder = function (folder) {
+      self.chosenFolderId(folder);
     }
 
-    self.removeSeat = function (seat) {
-      self.seats.remove(seat);
-    }
+  };
 
-    self.totalSurcharge = ko.computed(function () {
-      var total = 0;
-      for (var i = 0; i < self.seats().length; i++) {
-        total += self.seats()[i].meal().price;
-      }
-      return total;
+  ko.applyBindings(new WebmailViewModel());
 
-    });
-
-  }
-
-  ko.applyBindings(new ReservationsViewModel());
+  ;
 
 </script>
 
