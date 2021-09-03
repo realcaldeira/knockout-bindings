@@ -26,6 +26,14 @@
           <div class="panel-body">
             <!-- Linha superior -->
             <div class="row">
+              <div class="col-xs-12">
+                <h4 data-bind="text: propA"></h4>
+
+
+                <button data-bind="click: function(){ viewParent($data); }">View Parent Root</button>
+                <br>
+
+              </div>
               <!-- COL ESQUEDA -->
               <ul class="list-group">
                 <!-- Itens da lista -->
@@ -43,7 +51,11 @@
             <div class="col-xs-6">
               <div class="row">
                 <div class="col-xs-12">
-
+                  <h3>Context Child</h3>
+                  <h4 data-bind="with: context2">
+                    <span data-bind="text: propsA"></span>
+                    <button data-bind="click: function(){ $parent.viewParent($data);}">View Child</button>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -62,6 +74,15 @@
   function ViewModel() {
     var self = this;
 
+    self.propA = ko.observable("PropA do conexto principal");
+    self.viewParent = function (parent) {
+      console.log(parent);
+    }
+
+    self.context2 = ko.observable({
+      propA: ko.observable("PropA do conexto filho")
+
+    });
   }
 
   vm = new ViewModel();
