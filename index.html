@@ -14,30 +14,44 @@
 
 <body>
 
-  <ul class="folders" data-bind="foreach: folders">
-    <li data-bind="text: $data, 
-    css: { selected: $data == $root.chosenFolderId()},
-    click: $root.goToFolder"></li>
-  </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-8 col-xs-offset-2">
+        <br>
+        <br>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>knockout bindings</h4>
+          </div>
+          <div class="panel-body">
+            <!-- Linha superior -->
+            <div class="row">
+              <!-- COL ESQUEDA -->
+              <ul class="list-group">
+                <!-- Itens da lista -->
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-xs-12"></div>
+                    <div class="col-xs-12"></div>
+                    <div class="col-xs-12"></div>
+                    <div class="col-xs-12"></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- COL DIREITA -->
+            <div class="col-xs-6">
+              <div class="row">
+                <div class="col-xs-12">
 
-  <table class="mails" data-bind="width: chosenFolderData">
-    <thead>
-      <tr>
-        <th>From</th>
-        <th>To</th>
-        <th>Subject</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-
-    <tr>
-      <td data-bind="text: from"></td>
-      <td data-bind="text: to"></td>
-      <td data-bind="text: subject"></td>
-      <td data-bind="text: date"></td>
-    </tr>
-
-  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
@@ -45,24 +59,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js" integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-  function WebmailViewModel() {
+  function ViewModel() {
     var self = this;
-    self.folders = ['Inbox', 'Archive', 'Sent', 'Spam'];
-    self.chosenFolderId = ko.observable();
-    self.chosenFolderData = ko.observable();
 
-    self.goToFolder = function (folder) {
-      self.chosenFolderId(folder);
-    }
-    self.goToFolder = function (folder) {
-      self.chosenFolderId(folder);
-      $.get('/mail', { folder: folder }, self.chosenFolderData);
-    }
+  }
 
+  vm = new ViewModel();
+  ko.applyBindings(vm);
 
-  };
-
-  ko.applyBindings(new WebmailViewModel());
 
 </script>
 
