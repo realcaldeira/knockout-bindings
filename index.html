@@ -26,44 +26,42 @@
           <div class="panel-body">
             <!-- Linha superior -->
             <div class="row">
-              <div class="col-xs-12">
-                <h4 data-bind="text: propA"></h4>
-
-
-                <button data-bind="click: function(){ viewParent($data); }">View Parent Root</button>
-                <br>
-
-              </div>
-              <!-- COL ESQUEDA -->
-              <ul class="list-group">
-                <!-- Itens da lista -->
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col-xs-12"></div>
-                    <div class="col-xs-12"></div>
-                    <div class="col-xs-12"></div>
-                    <div class="col-xs-12"></div>
-                  </div>
-                </li>
-              </ul>
+              <div class="col-xs-12" data-bind="template: {name: 'cabecalho-template'}"></div>
             </div>
-            <!-- COL DIREITA -->
-            <div class="col-xs-6">
-              <div class="row">
-                <div class="col-xs-12">
-                  <h3>Context Child</h3>
-                  <h4 data-bind="with: context2">
-                    <span data-bind="text: propsA"></span>
-                    <button data-bind="click: function(){ $parent.viewParent($data);}">View Child</button>
-                  </h4>
-                </div>
-              </div>
+            <!-- COL ESQUEDA -->
+            <div class="row">
+              <div class="col-xs-6"></div>
+            </div>
+            <ul class="list-group" data-bind="template:{name: 'item-lista-template', foreach: lista}"></ul>
+          </div>
+        </div>
+        <!-- COL DIREITA -->
+        <div class="col-xs-6">
+          <div class="row">
+            <div class="col-xs-12">
+              <h4>
+                <span></span>
+              </h4>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
+  </div>
+
+  <script type="text/html" id="cabecalho-template">
+    <h3 data-bind="text: tituloCabecalho"></h3>
+    <p>Assunto: <span data-bind="text: assuntoCabecalho"></span></p>
+  </script>
+
+  <script type="text/html" id="item-lista-template">
+    <h3 data-bind="text: titulo"></h3>
+    <p>Assunto: <span data-bind="text: conteudo"></span></p>
+    <hr>
+  </script>
+
 
 </body>
 
@@ -74,15 +72,15 @@
   function ViewModel() {
     var self = this;
 
-    self.propA = ko.observable("PropA do conexto principal");
-    self.viewParent = function (parent) {
-      console.log(parent);
-    }
+    self.tituloCabecalho = ko.observable("Titulo");
+    self.assuntoCabecalho = ko.observable("Assunto");
 
-    self.context2 = ko.observable({
-      propA: ko.observable("PropA do conexto filho")
+    self.lista = ko.observableArray([
+      { titulo: "Titulo item 1", conteudo: "Conteúdo item 1" },
+      { titulo: "Titulo item 2", conteudo: "Conteúdo item 2" },
+      { titulo: "Titulo item 3", conteudo: "Conteúdo item 3" },
+    ]);
 
-    });
   }
 
   vm = new ViewModel();
